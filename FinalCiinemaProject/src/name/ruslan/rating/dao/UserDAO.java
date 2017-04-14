@@ -1,6 +1,16 @@
 package name.ruslan.rating.dao;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import name.ruslan.rating.dbentity.User;
 import name.ruslan.rating.exception.DAOException;
+import name.ruslan.rating.pool.ProxyConnection;
 
 public class UserDAO extends AbstractDAO<String, User> {
 
@@ -79,7 +89,7 @@ public class UserDAO extends AbstractDAO<String, User> {
 
     @Override
     public List<User> selectAll() throws DAOException {
-        List<User> userList = new ArrayList<>();
+        List<User> userList = new ArrayList();
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_USERS);
             while (resultSet.next()) {
@@ -88,15 +98,7 @@ public class UserDAO extends AbstractDAO<String, User> {
                 user.setEmail(resultSet.getString("email"));
                 user.setRegistrationDate(resultSet.getDate("registration_date"));
                 user.setRating(resultSet.getInt("rating"));
-                user.setRole(resultSet.getString("role"));
-                user.setGender(resultSet.getString("gender"));
-                user.setStatus(resultSet.getString("status"));
-                user.setLastName(resultSet.getString("lastname"));
-                user.setFirstName(resultSet.getString("firstname"));
-                user.setAvatarPath(resultSet.getString("avatar_path"));
-                user.setBirthDate(resultSet.getDate("birth_date"));
-                user.setCountry(resultSet.getString("country"));
-                user.setFavoriteGenres(resultSet.getString("favorite_genres"));
+                user.setRole(resultSet.getString("role"));                
                 userList.add(user);
             }
 
@@ -120,13 +122,8 @@ public class UserDAO extends AbstractDAO<String, User> {
                 user.setRegistrationDate(resultSet.getDate("registration_date"));
                 user.setRating(resultSet.getInt("rating"));
                 user.setRole(resultSet.getString("role"));
-                user.setGender(resultSet.getString("gender"));
-                user.setLastName(resultSet.getString("lastname"));
-                user.setFirstName(resultSet.getString("firstname"));
-                user.setAvatarPath(resultSet.getString("avatar_path"));
                 user.setBirthDate(resultSet.getDate("birth_date"));
                 user.setCountry(resultSet.getString("country"));
-                user.setFavoriteGenres(resultSet.getString("favorite_genres"));
             }
         } catch (SQLException e) {
             throw new DAOException("Fail when select user by key = " + key + " from db: ", e);
@@ -336,14 +333,12 @@ public class UserDAO extends AbstractDAO<String, User> {
         return success;
     }
 
-    @Override
     public String insert(User user) throws DAOException {
         try (PreparedStatement statement = connection.prepareStatement(SQL_INSERT_USER,
                 PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getLogin());
             statement.setString(2, user.getPassword());
-            statement.setString(3, user.getEmail());
-            statement.setString(4, user.getAccountActivationHash());
+            statement.setString(3, user.getEmail());            
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("Fail when insert user = " + user + " into db: ", e);
@@ -351,7 +346,6 @@ public class UserDAO extends AbstractDAO<String, User> {
         return user.getLogin();
     }
 
-    @Override
     public boolean delete(String key) throws DAOException {
         boolean success;
         try (PreparedStatement statement = connection.prepareStatement(SQL_DELETE_USER)) {
@@ -363,17 +357,10 @@ public class UserDAO extends AbstractDAO<String, User> {
         return success;
     }
 
-    @Override
     public boolean update(User user) throws DAOException {
         boolean success;
         try (PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_USER)) {
-            statement.setString(1, user.getGender());
-            statement.setString(2, user.getLastName());
-            statement.setString(3, user.getFirstName());
-            statement.setString(4, user.getAvatarPath());
-            statement.setDate(5, user.getBirthDate());
             statement.setString(6, user.getCountry());
-            statement.setString(7, user.getFavoriteGenres());
             statement.setString(8, user.getLogin());
             success = statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -422,8 +409,4 @@ public class UserDAO extends AbstractDAO<String, User> {
         }
         return Optional.ofNullable(rating);
     }
-
-
-
-
 }
