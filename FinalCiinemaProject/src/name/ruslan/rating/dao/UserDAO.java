@@ -15,72 +15,9 @@ import name.ruslan.rating.pool.ProxyConnection;
 public class UserDAO extends AbstractDAO<String, User> {
 
     private static final String SQL_SELECT_ALL_USERS =
-            "SELECT login, email, registration_date, rating, role, gender, status, lastname, firstname, avatar_path, " +
-            "birth_date, country, favorite_genres FROM user";
-
-    private static final String SQL_SELECT_USER =
-            "SELECT login, email, registration_date, rating, role, gender, lastname, firstname, avatar_path, " +
-            "birth_date, country, favorite_genres FROM user WHERE login = ?";
-
-    private static final String SQL_SELECT_EMAIL_BY_ITSELF =
-            "SELECT email FROM user WHERE email = ?";
-
-    private static final String SQL_SELECT_LOGIN_BY_EMAIL =
-            "SELECT login FROM user WHERE email = ?";
-
-    private static final String SQL_SELECT_PASSWORD =
-            "SELECT password FROM user WHERE login = ?";
-
-    private static final String SQL_SELECT_ROLE =
-            "SELECT role FROM user WHERE login = ?";
-
-    private static final String SQL_SELECT_LOGIN =
-            "SELECT login FROM user WHERE login = ?";
-
-    private static final String SQL_SELECT_STATUS =
-            "SELECT status FROM user WHERE login = ?";
-
-    private static final String SQL_SELECT_ACTIVATION_HASH =
-            "SELECT account_activation_hash FROM user WHERE login = ?";
-
-    private static final String SQL_SELECT_USER_RATING =
-            "SELECT rating FROM user WHERE login = ?";
-
-    private static final String SQL_SELECT_WARNING_CARDS_FOR_USER =
-            "SELECT id_card, type, expiration_date FROM warning_card WHERE login = ?";
-
-    private static final String SQL_SELECT_WARNING_CARDS_FOR_USER_BY_TYPE =
-            "SELECT id_card, type, expiration_date FROM warning_card WHERE login = ? AND type = ?";
+            "SELECT login, email, registration_date, rating FROM user";
 
 
-    private static final String SQL_INSERT_USER =
-            "INSERT INTO user (login, password, email, account_activation_hash) values (?,?,?,?)";
-
-    private static final String SQL_INSERT_WARNING_CARD =
-            "INSERT INTO warning_card(login, type, expiration_date) VALUES(?,?,?)";
-
-
-    private static final String SQL_UPDATE_STATUS =
-            "UPDATE user SET status = ? WHERE login = ?";
-
-    private static final String SQL_UPDATE_ACTIVATION_HASH =
-            "UPDATE user SET account_activation_hash = ? WHERE login = ?";
-
-    private static final String SQL_UPDATE_PASSWORD =
-            "UPDATE user SET password = ? WHERE login = ?";
-
-    private static final String SQL_UPDATE_USER =
-            "UPDATE user SET gender = ?, lastname = ?, firstname = ?, avatar_path = ?, birth_date = ?, country = ?, " +
-            "favorite_genres = ? WHERE login = ?";
-
-    private static final String SQL_UPDATE_USER_RATING =
-            "UPDATE user SET rating = ? WHERE login = ?";
-
-
-    private static final String SQL_DELETE_USER =
-            "DELETE FROM user WHERE login = ?";
-    private static final String SQL_DELETE_WARNING_CARD_FOR_USER =
-            "DELETE FROM warning_card WHERE login = ? AND type = ?";
 
 
     public UserDAO(ProxyConnection connection) {
